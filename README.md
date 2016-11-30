@@ -1,7 +1,7 @@
-# Advanced Functional Programming in Scala
+# FP Examples 
 
-This is the repository for exercises for Advanced Functional Programming in
-Scala, a LambdaConf workshop taught by @jdegoes.
+Rpository for exercises for Advanced Functional Programming in
+Scala, a LambdaConf workshop taught by @jdegoes is used to try out different examples of Functional Strauctures. 
 
 # Getting Started
 
@@ -14,5 +14,4 @@ sbt
 
 SBT should download all dependencies and compile the source code.
 
-Then open up the `src/main/scala/` directory. You will find one file for each
-section of the workshop, and exercises in each file.
+Then open up the `src/main/scala/` directory to see the examples. 
