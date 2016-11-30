@@ -5,7 +5,6 @@ import Scalaz._
 import org.scalatest._
 import Matchers._
 
-
 object FoldableExamples1 extends App {
 
   sealed trait Tree[A]
@@ -14,9 +13,7 @@ object FoldableExamples1 extends App {
 
   case class Node[A](left: Tree[A], right: Tree[A]) extends Tree[A]
 
-
   val tree: Tree[Int] = Node(Leaf(1), Node(Leaf(3), Leaf(5)))
-
 
   implicit val TreeFunctor = new Functor[Tree] {
     def map[A, B](fa: Tree[A])(f: (A) => B): Tree[B] = fa match {
@@ -116,14 +113,13 @@ object FunctorTestApp extends App{
   }
 
   object Transformer{
-      @inline def apply[F](implicit F: Transformer[F]): Transformer[F] = F
+      @inline
+      def apply[F](implicit F: Transformer[F]): Transformer[F] = F
   }
-
   case class Product(productId: String, description: String)
   implicit val productTransformer = new Transformer[Product] {
     def str(a: Product): String = s"[Product]: ${a.productId}, ${a.description}"
   }
-
 
   val aProduct = Product("123123", "Nike")
 

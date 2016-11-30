@@ -1,7 +1,7 @@
 # FP Examples 
 
-Rpository for exercises for Advanced Functional Programming in
-Scala, a LambdaConf workshop taught by @jdegoes is used to try out different examples of Functional Strauctures. 
+Repository for exercises for Advanced Functional Programming in
+Scala, a LambdaConf workshop taught by @jdegoes is used to try out different examples of **functional structures**. 
 
 # Getting Started
 

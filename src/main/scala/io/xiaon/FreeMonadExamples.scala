@@ -1,10 +1,7 @@
 package io.xiaon
 
-import java.io.Serializable
-
 import scalaz._
 import Scalaz._
-
 
 object exampleFree04 extends App {
 
@@ -21,10 +18,7 @@ object exampleFree04 extends App {
       fa.toList
   }
 
-
-
   val test: Coproduct[Option,Option,?] ~> List   = or(optToList, optToList)
-
   test(Coproduct.left[Option](Some(1))).println
 }
 
@@ -311,10 +305,7 @@ object example02 {
     //   (Avoided smart constructors by implicit lift (may effect performance))
 
   }
-
 }
-
-
 
 object MainAppCoyoneda extends App {
   import  exampleFree01._

@@ -1,7 +1,5 @@
 package essenceoffp
 
-import lambdaconf.patterns.exercise3.IO
-
 import scala.io.StdIn
 import scalaz.Monad
 import scalaz._
@@ -9,9 +7,6 @@ import Scalaz._
 import scala.util.Try
 
 import org.scalatest._
-import Matchers._
-
-
 
 object example01 extends App {
 
@@ -82,14 +77,8 @@ object example01 extends App {
       c <- io((latitude |@| longitude){Coordinate})
     } yield c
 
-
   readCoordinate2.unsafePerformIO() |> println
-
-
 }
-
-
-
 
 object exampl02app extends App {
   case class Id[A](value: A)
