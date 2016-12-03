@@ -1,7 +1,5 @@
 package lambdaconf.types
 
-import matryoshka._
-import monocle._
 import scalaz._
 import Scalaz._
 

@@ -24,12 +24,13 @@ object exampleFree04 extends App {
 
 
 object exampleFree02 {
-  val free =
+  val free: Free[Option, Int] =
     for {
       x ← Free.liftF(1.some)
       y ← Free.liftF(2.some)
       z ← Free.liftF(3.some)
     } yield x + y + z
+
 
   val idExe: Option ~> Option = new (Option ~> Option) {
     def apply[A](in: Option[A]): Option[A] = in

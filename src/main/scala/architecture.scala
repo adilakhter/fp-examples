@@ -1,7 +1,5 @@
 package lambdaconf.architecture
 
-import matryoshka._
-import monocle._
 import scalaz._
 
 import Scalaz._
@@ -38,7 +36,7 @@ object ExerciseFree2 {
   def println(line: String): ConsoleF[Unit]= Free.liftF[Console, Unit](Println(line))
   def readLine[A](f: String => A): ConsoleF[A] = Free.liftF[Console, A](ReadLine(f))
 
-  val program = for {
+  val program: ConsoleF[Unit] = for {
     _ <- println("c")
     name <- readLine(line => line.toUpperCase())
     _ <- println("x" + name)

@@ -1,8 +1,6 @@
 package lambdaconf.effects
 
 import lambdaconf.effects.exercise3.State.Person
-import matryoshka._
-import monocle._
 
 import scalaz._
 import Scalaz._

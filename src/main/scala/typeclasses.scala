@@ -1,8 +1,5 @@
 package lambdaconf.typeclasses
 
-import matryoshka._
-import monocle._
-
 import scalaz._
 import Scalaz._
 import scala.util.Try

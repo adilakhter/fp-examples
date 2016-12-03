@@ -1,7 +1,4 @@
 package lambdaconf.functions
-
-import matryoshka._
-import monocle._
 import scalaz._
 
 import Scalaz._

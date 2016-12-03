@@ -21,15 +21,16 @@ val matryoshkaVersion = "0.11.1"
 lazy val http4sVersion = "0.15.0-SNAPSHOT"
 
 libraryDependencies ++= Seq(
-  "com.github.julien-truffaut"  %%  "monocle-core"    % monocleVersion,
-  "com.github.julien-truffaut"  %%  "monocle-generic" % monocleVersion,
-  "com.github.julien-truffaut"  %%  "monocle-macro"   % monocleVersion,
-  "com.github.julien-truffaut"  %%  "monocle-state"   % monocleVersion,
-  "com.github.julien-truffaut"  %%  "monocle-refined" % monocleVersion,
-  "com.github.julien-truffaut"  %%  "monocle-law"     % monocleVersion % "test",
+//  "com.github.julien-truffaut"  %%  "monocle-core"    % monocleVersion,
+//  "com.github.julien-truffaut"  %%  "monocle-generic" % monocleVersion,
+//  "com.github.julien-truffaut"  %%  "monocle-macro"   % monocleVersion,
+//  "com.github.julien-truffaut"  %%  "monocle-state"   % monocleVersion,
+//  "com.github.julien-truffaut"  %%  "monocle-refined" % monocleVersion,
+//  "com.github.julien-truffaut"  %%  "monocle-law"     % monocleVersion % "test",
   "org.scalaz"                  %%  "scalaz-core"     % scalazVersion,
-  "com.slamdata"                %%  "matryoshka-core" % matryoshkaVersion,
-  "org.scalatest" %% "scalatest" % "3.0.0"
+//  "com.slamdata"                %%  "matryoshka-core" % matryoshkaVersion,
+//"org.typelevel"               %%  "cats"            % "0.7.2",
+  "org.scalatest" %% "scalatest" % "3.0.1"
 )
 
 // for @Lenses macro support

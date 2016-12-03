@@ -99,7 +99,7 @@ object FoldableExamples1 extends App {
   println(resultApp)
 
 
-}
+  }
 
 
 object FunctorTestApp extends App{

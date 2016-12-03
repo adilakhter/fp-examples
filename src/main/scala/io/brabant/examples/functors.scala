@@ -89,11 +89,23 @@ object exampleFunctor01 extends App {
 
   val result1 = List(1, 2) mapWith (_ + 1)
   val result2 = List("a", "b") mapWith (_ + "c")
-
   val result3 = 1.some mapWith (_ * 10)
 
 
   result3.println
+
+  import org.scalatest.Matchers._
+
+  val f: String => String = _.replaceAll("ß", "ss").replaceAll("[^a-zA-Z0-9-]+", "-")
+  def divideOneBy(x: Int): Double = 1/x.toDouble
+
+  List("scala","eXch;nge").mapWith(f) should contain theSameElementsAs List("scala", "eXch-nge")
+
+  Option(2).mapWith(divideOneBy) shouldEqual Some(.5)
+
+  import scalaz._
+  import Scalaz._
+
 }
 
 object FunctorExample2 extends App {
@@ -128,13 +140,6 @@ object FunctorExample2 extends App {
 
 
   Functor[Tree].map(tree2)(f) |> println
-
-
-
-
-
-
-
 
 
 }
