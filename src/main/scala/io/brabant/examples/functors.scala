@@ -59,8 +59,6 @@ object exampleMonoid02 extends App {
   reduce(List("a","b","c")).println
 
   result.println
-
-
 }
 
 object exampleTraversable01 extends App{

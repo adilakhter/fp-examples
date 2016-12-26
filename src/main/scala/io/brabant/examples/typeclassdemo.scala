@@ -34,28 +34,26 @@ object ProductApplicative extends App {
   def itemitemRecommendations(aProduct: Product): Option[List[Product]] = ???
   def visualRecommendations(aProduct: Product): Option[List[Product]] = ???
 
-  def getAllRecommendations(aProduct: Product): Option[List[Product]] = (itemitemRecommendations(aProduct) |@| visualRecommendations(aProduct)) {_ ++ _}
+  def recommendations(aProduct: Product): Option[List[Product]] =
+    (itemitemRecommendations(aProduct) |@| visualRecommendations(aProduct)) {_ ++ _}
 
 
   val allResult: Option[List[Product]] = (itemitemRecommendations(aProduct) |@| visualRecommendations(aProduct)) {_ ++ _}
 
   def product(id: String): Option[Product] = ???
 
+  def recommendations(id: String): Option[List[Product]] =
+    for {
+      p <- product("123123")
+      recs <- recommendations(p)
+    } yield recs
 
 
 
-  val result = for {
-    p <- product("123123")
-    recs <- getAllRecommendations(p)
-  } yield recs
 
 
-
-
-  throw new Error
 //  def itemitemRecommendations2(aProduct: Product): Task[List[Product]] = ???
 //  def visualRecommendations2(aProduct: Product): Task[List[Product]] = ???
-//
 //
 //  val allResult2: Task[List[Product]] = (itemitemRecommendations2(aProduct) |@| visualRecommendations2(aProduct)) {_ ++ _}
 }

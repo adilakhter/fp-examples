@@ -36,7 +36,7 @@ object exampleApplicative02 extends App {
 
   val result2 = sum(x)(y)(z)
 
-  val sumX: Option[Int => Int => Int] =  xOpt <*> sum.some
+  val sumX: Option[Int => Int => Int] =  xOpt <*> sum.pure[Option]
   val sumY: Option[Int => Int]        =  yOpt <*> sumX
   val sumZ: Option[Int]               =  zOpt <*> sumY
 

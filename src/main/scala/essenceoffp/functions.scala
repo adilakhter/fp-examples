@@ -14,7 +14,14 @@ object functions1 {
 
   val add = (x: Int) => x + 1 // ← Functions are also values
 
-  val add2: Int => (Int => Int) = x => (y => x + y)
+  val addTwoInts: Int => (Int => Int) = x => y => x + y
+
+  val addWithOne: Int => Int = addTwoInts (1)
+
+
+
+
+
 }
 
 

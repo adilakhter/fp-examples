@@ -1,5 +1,28 @@
 package essenceoffp
 
+import essenceoffp.applicativesExample04.ApplicativeOps
+import essenceoffp.example01.IO
+
+import scalaz.Functor
+
+object functorsExampleSetIsNotFunctor extends  App {
+
+  case class Container[A](unwrap: A) {
+    override def equals(obj: scala.Any): Boolean = true
+  }
+
+  val f = (i: Int) ⇒ Container(i)
+  val g = (wrap: Container[Int]) ⇒ wrap.unwrap
+
+  val aSet = Set(1,2,3)
+
+  aSet.map(f).map(g) // Set(1)
+
+  aSet.map(f andThen g) // Set(1,2,3 )
+
+
+}
+
 
 object functors01 extends  App {
 
@@ -103,5 +126,83 @@ object functorTreeExample01 extends App {
       Node(
         Leaf("eXch-nge"),
         Leaf("ssss"))) // ← a tree with  normalized strings
+
+}
+
+object FunctorExample04 extends App{
+
+
+  import scalaz._
+  import Scalaz._
+
+  final case class IO[A](unsafePerformIO: () => A)
+
+  def readLine2: IO[String] = IO(() => readLine())
+
+  def println2(s: String): IO[Unit] = IO(() => println(s))
+
+  def io[A](computation: =>A): IO[A] = IO(() => computation)
+
+
+
+  implicit val IOFunctor: Functor[IO] = new Functor[IO]{
+    override def map[A, B](fa: IO[A])(f: A => B): IO[B] =
+      IO (() ⇒ f(fa.unsafePerformIO()))
+  }
+
+
+  val x = IO(() ⇒ "100.0")
+  val y: IO[Double] = x.map(_.toDouble)
+
+  println(y.unsafePerformIO())
+
+}
+
+object ApplicativeExample05 extends App{
+
+
+  import scalaz._
+  import Scalaz._
+
+  final case class IO[A](unsafePerformIO: () => A)
+
+  def readLine2: IO[String] = IO(() => readLine())
+
+  def println2(s: String): IO[Unit] = IO(() => println(s))
+
+  def io[A](computation: =>A): IO[A] = IO(() => computation)
+
+
+
+  implicit val IOApplicative = new Applicative[IO]{
+    def point[A](a: => A): IO[A] = IO(() ⇒ a)
+
+    def ap[A, B](fa: => IO[A])(f: => IO[A => B]): IO[B] = {
+      IO(() ⇒ f.unsafePerformIO().apply(fa.unsafePerformIO()))
+    }
+  }
+
+//  case class ApplicativeOps[F[_]: Applicative,A] (self: F[A]) {
+//    val  F = implicitly[Applicative[F]]
+//
+//    def <*>[B](f: F[A => B]): F[B] = F.ap(self)(f)
+//  }
+//
+//  implicit def ToApplicativeOps[F[_]: Applicative, A](v: F[A]): ApplicativeOps[F, A] =
+//    ApplicativeOps(v)
+//
+
+  val add = (x:Double) ⇒ (y: Double) ⇒ x + y
+
+  val longitudeIO = IO(() ⇒ "1.0")
+
+  val longitude: IO[Double] = longitudeIO.map(_.toDouble)
+  val latitude: IO[Double] = longitudeIO.map(_.toDouble)
+
+  val result: IO[Double] = longitude <*> (latitude <*> add.point[IO])
+
+
+  println(result.unsafePerformIO())
+
 
 }

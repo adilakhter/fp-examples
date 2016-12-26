@@ -31,15 +31,20 @@ object example01 extends App {
 
   def io[A](computation: =>A): IO[A] = IO(() => computation)
 
-  implicit val monadIO: Monad[IO] = new Monad[IO] {
-    override def point[A](a: => A): IO[A] = IO(() => a)
 
-    override def bind[A, B](fa: IO[A])(f: (A) => IO[B]): IO[B] =
+
+
+
+
+  implicit val IOMonad: Monad[IO] = new Monad[IO] {
+    def point[A](a: => A): IO[A] = IO(() => a)
+
+    def bind[A, B](fa: IO[A])(f: (A) => IO[B]): IO[B] =
       IO(() => f(fa.unsafePerformIO()).unsafePerformIO())
   }
 
 
-  val ioMonad: IO[(String, String)] =
+  val coordinateStringIO: IO[(String, String)] =
     for {
       _ ← println2("Latitude:")
       x ← readLine2
@@ -48,11 +53,15 @@ object example01 extends App {
     } yield (x, y)
 
 
-//  val result = ioMonad.unsafePerformIO()
+// val result: (String, String) = coordinateStringIO.unsafePerformIO()
 
  // println(result)
 
-
+//  > Longitude:
+//  37.773972↩︎
+//  > Latitude:
+//  -122.431297↩︎
+//  // result = (37.773972,-122.431297)
 
 
   sealed trait ToEither2[A, B] {
@@ -66,7 +75,7 @@ object example01 extends App {
       }
   }
 
-  val readCoordinate2: IO[Option[Coordinate]] =
+  val coordinateIO: IO[Option[Coordinate]] =
     for {
       _ ← println2("Latitude:")
       x ← readLine2
@@ -77,14 +86,18 @@ object example01 extends App {
       c <- io((latitude |@| longitude){Coordinate})
     } yield c
 
-  readCoordinate2.unsafePerformIO() |> println
+  //val coordinate: Option[Coordinate] = coordinateIO.unsafePerformIO()
+
+  //coordinateIO.unsafePerformIO() |> println
 }
 
 object exampl02app extends App {
+
   case class Id[A](value: A)
 
-  implicit  val identityMonad = new Monad[Id] {
+  implicit val identityMonad = new Monad[Id] {
     def point[A](a: => A): Id[A] = Id(a)
+
     def bind[A, B](fa: Id[A])(f: (A) => Id[B]): Id[B] = f(fa.value)
   }
 
@@ -92,7 +105,13 @@ object exampl02app extends App {
   val idMonad = implicitly[Monad[Id]]
 
   val x: Id[Int] = Id(1)
-  val y: Id[Boolean] = Id(1).flatMap(i => Id(i%2 == 0))
+  val y: Id[Boolean] = Id(1).flatMap(i => Id(i % 2 == 0))
 
-  println(y)
+  val z =
+    for {
+      x ← Id(1)
+      y ← Id(x % 2 == 0)
+    } yield y
+
+  println(z)
 }
