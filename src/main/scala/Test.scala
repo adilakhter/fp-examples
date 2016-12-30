@@ -2,9 +2,6 @@ import collection.mutable
 import DynamicExecutionContext._
 
 object Test extends App {
-
-
-
   val x = new DynamicExecutionContext
   x.updateDynamic("lookup1")((x: String, y: Int) => s"A method called with arg1(string)=$x and arg2(int)=$y")
   x.lookup2 = (x: String) => s"42"
@@ -12,10 +9,6 @@ object Test extends App {
   println(x.applyDynamic("lookup1")("hello", 42))
 
   println(x.lookup2("hello"))
-
-
-
-
 }
 
 
@@ -37,7 +30,8 @@ class DynamicExecutionContext extends Dynamic {
   def applyDynamic(key: String)(args: Any*) = methods(key)(args)
 
 
-  def delete(key: String) = throw new UnsupportedOperationException("Delete not supported")
+  def delete(key: String) =
+    throw new UnsupportedOperationException("Delete not supported")
 
 }
 
@@ -52,5 +46,3 @@ object DynamicExecutionContext {
   def compose[A,B,C](f: PartialFunction[A, B], g: PartialFunction[B, C]) : PartialFunction[A, C] =
     Function.unlift(f.andThen(g.lift))
 }
-
-

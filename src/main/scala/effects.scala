@@ -1,6 +1,5 @@
 package lambdaconf.effects
 
-import lambdaconf.effects.exercise3.State.Person
 
 import scalaz._
 import Scalaz._
@@ -13,7 +12,6 @@ object exercise1 {
 }
 
 object exercise2 {
-  import exercise1._
 
   sealed trait ConsoleF[A]
 

@@ -30,7 +30,8 @@ libraryDependencies ++= Seq(
   "org.scalaz"                  %%  "scalaz-core"     % scalazVersion,
 //  "com.slamdata"                %%  "matryoshka-core" % matryoshkaVersion,
 //"org.typelevel"               %%  "cats"            % "0.7.2",
-  "org.scalatest" %% "scalatest" % "3.0.1"
+  "org.scalatest" %% "scalatest" % "3.0.1",
+  "com.chuusai" %% "shapeless" % "2.3.2"
 )
 
 // for @Lenses macro support
