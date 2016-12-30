@@ -2,35 +2,6 @@ package io.xiaon
 
 import java.lang.reflect.Method
 
-object reflectionUtils {
-
-  import scala.reflect.runtime.{universe => ru}
-
-  def getTypeTag[T: ru.TypeTag](obj: T): ru.TypeTag[T] =
-    ru.typeTag[T]
-
-
-  /**
-    * Transforms eventTransformer, which is a PartialFunction from A ⇒ B
-    * to a PartialFunction from classOf[A] ⇒ classOf[B]
-    */
-  def transformToEventClassTransformer[A,B](eventTransformer: PartialFunction[A,B])
-                                           (implicit typeTag: ru.TypeTag[PartialFunction[A,B]]): PartialFunction[Class[_], Class[_]] = {
-
-    val fnTypeTag = getTypeTag(eventTransformer)
-    val typeArgs = fnTypeTag.tpe.typeArgs
-    val runtimeMirror = fnTypeTag.mirror
-
-    val (in, out) = (typeArgs.head, typeArgs.last)
-
-    val inputType = runtimeMirror.runtimeClass(in)
-    val outputType = runtimeMirror.runtimeClass(out)
-
-    PartialFunction(inputType ⇒ outputType)
-  }
-
-}
-
 case class InteractionTransition[A](interactionClass: Class[A], interactionProvider: () => A, interactionMethod: String) {
 
   val method: Method = interactionClass.getDeclaredMethods.find(_.getName == interactionMethod)
@@ -45,7 +16,7 @@ case class InteractionTransition[A](interactionClass: Class[A], interactionProvi
 
 object interactionsDef {
 
-  import reflectionUtils._
+  import xiaon.reflectionUtils._
 
   val interactionTransition = InteractionTransition[SimpleInteractionThatTriggersEvent](
     interactionClass = classOf[SimpleInteractionThatTriggersEvent],
