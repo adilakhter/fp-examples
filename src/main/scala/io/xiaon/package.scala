@@ -7,17 +7,10 @@ package object xiaon {
     def getTypeTag[T: ru.TypeTag](obj: T): ru.TypeTag[T] =
       ru.typeTag[T]
 
+    def transformToEventClassTransformer[A,B](fn: Function1[A,B])
+                                             (implicit typeTag: ru.TypeTag[Function1[A,B]]): (Class[_], Class[_]) = {
 
-    /**
-      *  Converts a PartialFunction of A ⇒ B to a Partial Function of Class[A] ⇒ Class[B]
-      */
-    def transformToEventClassTransformer[A,B](eventTransformer: PartialFunction[A,B])
-                                             (implicit typeTag: ru.TypeTag[PartialFunction[A,B]]): PartialFunction[Class[_], Class[_]] = {
-
-      //TODO: see if we can somehow avoid using reflection.
-      //TODO: used ClassTag of A and B as a context bound
-
-      val fnTypeTag = getTypeTag(eventTransformer)
+      val fnTypeTag = getTypeTag(fn)
       val typeArgs = fnTypeTag.tpe.typeArgs
       val runtimeMirror = fnTypeTag.mirror
 
@@ -26,8 +19,7 @@ package object xiaon {
       val inputType = runtimeMirror.runtimeClass(in)
       val outputType = runtimeMirror.runtimeClass(out)
 
-      PartialFunction(inputType ⇒ outputType)
+      (inputType, outputType)
     }
-
   }
 }

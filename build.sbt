@@ -29,7 +29,7 @@ libraryDependencies ++= Seq(
 //  "com.github.julien-truffaut"  %%  "monocle-law"     % monocleVersion % "test",
   "org.scalaz"                  %%  "scalaz-core"     % scalazVersion,
 //  "com.slamdata"                %%  "matryoshka-core" % matryoshkaVersion,
-//"org.typelevel"               %%  "cats"            % "0.7.2",
+  "org.typelevel"               %%  "cats"            % "0.7.2",
   "org.scalatest" %% "scalatest" % "3.0.1",
   "com.chuusai" %% "shapeless" % "2.3.2"
 )
@@ -42,7 +42,6 @@ addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.7.1")
 
 
 initialCommands in console := "import scalaz._, Scalaz._"
-
 
 scalacOptions := Seq(
   "-unchecked",
