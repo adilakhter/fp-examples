@@ -2,50 +2,52 @@ package io.xiaon
 
 import java.lang.reflect.Method
 
-case class InteractionTransition[A](interactionClass: Class[A], interactionProvider: () => A, interactionMethod: String) {
+object polyfunctionsexamples02 extends App {
 
-  val method: Method = interactionClass.getDeclaredMethods.find(_.getName == interactionMethod)
-    .getOrElse(throw new IllegalStateException(s"No method named '$interactionMethod' defined on '${interactionClass.getName}'"))
+  case class InteractionTransition[A](interactionClass: Class[A], interactionProvider: () => A, interactionMethod: String) {
 
-  val interactionObject: A = interactionProvider.apply()
+    val method: Method = interactionClass.getDeclaredMethods.find(_.getName == interactionMethod)
+      .getOrElse(throw new IllegalStateException(s"No method named '$interactionMethod' defined on '${interactionClass.getName}'"))
 
-  def invokeInteraction(args: Seq[AnyRef]): Object = {
-    method.invoke(interactionObject, args: _*)
-  }
-}
+    val interactionObject: A = interactionProvider.apply()
 
-object interactionsDef {
-
-  import xiaon.reflectionUtils._
-
-  val interactionTransition = InteractionTransition[SimpleInteractionThatTriggersEvent](
-    interactionClass = classOf[SimpleInteractionThatTriggersEvent],
-    interactionProvider = () => SimpleInteractionThatTriggersEventImpl,
-    interactionMethod = "aInteraction")
-
-
-  case class EventFromInteraction(msg: String)
-  case class TransformedEventFromInteraction(msg: String, s: Int)
-
-  val testEventTransformer: PartialFunction[EventFromInteraction, TransformedEventFromInteraction] = {
-    case EventFromInteraction(msg) ⇒ TransformedEventFromInteraction(msg, Integer.MAX_VALUE)
+    def invokeInteraction(args: Seq[AnyRef]): Object = {
+      method.invoke(interactionObject, args: _*)
+    }
   }
 
-  val testEventClassTransformer: PartialFunction[Class[_], Class[_]] =
-    transformToEventClassTransformer(testEventTransformer)
+  object interactionsDef {
 
-  trait SimpleInteractionThatTriggersEvent {
-    def aInteraction(message: String): EventFromInteraction
+    import xiaon.reflectionUtils._
+
+    val interactionTransition = InteractionTransition[SimpleInteractionThatTriggersEvent](
+      interactionClass = classOf[SimpleInteractionThatTriggersEvent],
+      interactionProvider = () => SimpleInteractionThatTriggersEventImpl,
+      interactionMethod = "aInteraction")
+
+
+    case class EventFromInteraction(msg: String)
+
+    case class TransformedEventFromInteraction(msg: String, s: Int)
+
+    val testEventTransformer: PartialFunction[EventFromInteraction, TransformedEventFromInteraction] = {
+      case EventFromInteraction(msg) ⇒ TransformedEventFromInteraction(msg, Integer.MAX_VALUE)
+    }
+
+    val testEventClassTransformer: PartialFunction[Class[_], Class[_]] =
+      transformToEventClassTransformer(testEventTransformer)
+
+    trait SimpleInteractionThatTriggersEvent {
+      def aInteraction(message: String): EventFromInteraction
+    }
+
+    case object SimpleInteractionThatTriggersEventImpl extends SimpleInteractionThatTriggersEvent {
+      override def aInteraction(message: String): EventFromInteraction =
+        EventFromInteraction(message)
+    }
+
   }
 
-  case object SimpleInteractionThatTriggersEventImpl extends SimpleInteractionThatTriggersEvent {
-    override def aInteraction(message: String): EventFromInteraction =
-      EventFromInteraction(message)
-  }
-}
-
-
-object polyfunctionsexamples01 extends App {
 
   import interactionsDef._
 
