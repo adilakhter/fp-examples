@@ -34,8 +34,7 @@ object polyfunctionsexamples02 extends App {
       case EventFromInteraction(msg) ⇒ TransformedEventFromInteraction(msg, Integer.MAX_VALUE)
     }
 
-    val testEventClassTransformer: PartialFunction[Class[_], Class[_]] =
-      transformToEventClassTransformer(testEventTransformer)
+    val testEventClassTransformer: PartialFunction[Class[_], Class[_]] = ???
 
     trait SimpleInteractionThatTriggersEvent {
       def aInteraction(message: String): EventFromInteraction

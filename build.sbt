@@ -43,7 +43,6 @@ addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.7.1")
 
 initialCommands in console := "import scalaz._, Scalaz._"
 
-
 scalacOptions := Seq(
   "-unchecked",
   "-deprecation",
