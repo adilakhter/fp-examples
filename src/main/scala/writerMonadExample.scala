@@ -1,8 +1,5 @@
-import cats._
-import cats.data._
-import cats.implicits._
-
 object writerMonadExamples01 extends App {
+
 }
 
 
@@ -21,7 +18,6 @@ object listMonadTransformer01 extends App {
   object Monad {
 
     implicit object ListMonad extends Monad[List] {
-
       def map[A, B](fa: List[A])(f: A => B) = fa map f
 
       def flatMap[A, B](fa: List[A])(f: A => List[B]) = fa flatMap f
@@ -38,8 +34,5 @@ object listMonadTransformer01 extends App {
     }
 
     def apply[F[_] : Monad]: Monad[F] = implicitly[Monad[F]]
-
   }
-
-
 }
