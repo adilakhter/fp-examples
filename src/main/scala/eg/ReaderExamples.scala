@@ -97,4 +97,95 @@ object ReaderExample1 extends App{
 
 object ReaderExamples3 extends App {
 
+  case class User(id: Long, email: String)
+
+  trait UserRepository {
+    def findAll: List[User]
+    def save(user: User): User
+  }
+
+  trait DefaultUserRepository extends UserRepository {
+    def findAll: List[User] = List(User(123, "pepe@gmail.com"))
+    def save(user: User): User = {
+      println("Saving user " + user.email)
+      user
+    }
+  }
+
+  trait UserService {
+    def findAllReader = Reader((userRepository: UserRepository) => userRepository.findAll)
+    def saveReader(user: User) = Reader((userRepository: UserRepository) => userRepository.save(user))
+  }
+
+  trait AppConfig extends UserService with DefaultUserRepository
+
+  object Main extends AppConfig {
+    def run2(user: User): ReaderT[scalaz.Id.Id, UserRepository, List[User]] = {
+      for {
+        _      ← saveReader(user)
+        users  ← findAllReader
+      } yield users
+    }
+  }
+
+  private val defaultRespositoryConfiguration = new DefaultUserRepository {}
+  val result = Main.run2(User(1, "a@a.com")).run(defaultRespositoryConfiguration)
+
+  println(result)
+
 }
+
+object ReaderExample4 extends App {
+
+  case class Book(isbn: String, name: String)
+
+  trait Repository {
+    def get(isbn: String): Book
+    def getAll: List[Book]
+  }
+
+  trait Library {
+    import scalaz.Reader
+
+    def getBook(isbn: String) = Reader((repository: Repository) ⇒ repository.get(isbn))
+
+    def getAllBooks = Reader((repository: Repository) ⇒ repository.getAll)
+  }
+
+  object LibraryInfo extends Library {
+    def bookName(isbn: String) = getBook(isbn) map (_.name)
+  }
+
+  import scalaz.Reader
+
+  case class UniversityLibrary(repository: Repository) extends Library {
+    def getBookName(isbn: String): String = run(LibraryInfo.bookName(isbn))
+    def getAll: String = run(getAllBooks)
+
+    private def run[A](reader: Reader[Repository, A]): String = reader(repository).toString
+  }
+
+  object RepositoryImpl extends Repository {
+    def get(isbn: String): Book = Book("12323", "test")
+    def getAll: List[Book] = List(Book("12323", "test"))
+  }
+  val universityLibraryApp = UniversityLibrary(RepositoryImpl)
+
+  println(universityLibraryApp.getAll)
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
