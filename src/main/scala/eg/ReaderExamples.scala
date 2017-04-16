@@ -51,32 +51,45 @@ object SimpleReaderExample1 extends App {
 
 }
 
-import scalaz._
-import Scalaz._
-import scala.util.Try
 
+object ReaderExample1 extends App {
 
-
-object ReaderExample1 extends App{
+  import ReaderMonadImplementation._
+  import scala.util.Try
 
   class Dep1
+
   class Dep2
+
   class Dep3
 
-  trait Dep1Component { def dep1: Dep1 }
-  trait Dep2Component { def dep2: Dep2 }
-  trait Dep3Component { def dep3: Dep3 }
+  trait Dep1Component {
+    def dep1: Dep1
+  }
+
+  trait Dep2Component {
+    def dep2: Dep2
+  }
+
+  trait Dep3Component {
+    def dep3: Dep3
+  }
 
   class PageFetcher {
-    def fetch(url: String): Reader[Dep1Component, Try[String]] = Reader((deps: Dep1Component) => Try (url.toLowerCase))
+    def fetch(url: String): Reader[Dep1Component, Try[String]] = Reader((deps: Dep1Component) => Try(url.toLowerCase))
   }
 
   class ImageExtractor {
-    def extractImages(html: String): Reader[Dep2Component with Dep3Component, Try[String]] = Reader ((deps: (Dep2Component with Dep3Component)) ⇒ Try(html) )
+    def extractImages(html: String): Reader[Dep2Component with Dep3Component, Try[String]] = Reader((deps: (Dep2Component with Dep3Component)) ⇒ Try(html))
   }
 
-  trait PageFetcherComponent { def pageFetcher: PageFetcher }
-  trait ImageExtractorComponent { def imageExtractor: ImageExtractor }
+  trait PageFetcherComponent {
+    def pageFetcher: PageFetcher
+  }
+
+  trait ImageExtractorComponent {
+    def imageExtractor: ImageExtractor
+  }
 
   class Dependencies extends PageFetcherComponent
     with ImageExtractorComponent
@@ -94,21 +107,31 @@ object ReaderExample1 extends App{
 
   val dependencies = new Dependencies()
 
-//  def pageFetcherReader = Reader((dep: PageFetcherComponent) ⇒ dep.pageFetcher)
-//  def imageExtractorReader = Reader((dep: ImageExtractorComponent) ⇒ dep.imageExtractor)
-//  def fetchImage(url: String): Reader[Dependencies, Try[String]] = pageFetcherReader.flatMap((pf: PageFetcher) ⇒ pf.fetch(url))
+  def pageFetcherReader = Reader((dep: PageFetcherComponent) ⇒ dep.pageFetcher)
 
-//
-//
-//  val url = "TEST"
-//
-//  val imageFinder = find(url)
-//  println(imageFinder.run(dependencies))
+  def imageExtractorReader = Reader((dep: ImageExtractorComponent) ⇒ dep.imageExtractor)
 
+  def fetchImage(url: String): Reader[Dependencies, Try[String]] = pageFetcherReader.flatMap((pf: PageFetcher) ⇒ pf.fetch(url))
+
+
+  def find(url: String) = {
+    for {
+      pageFetcher ← pageFetcherReader
+      imageExtractor ← imageExtractorReader
+      htmlTry ← pageFetcher.fetch(url)
+      images ← imageExtractor.extractImages(htmlTry.get)
+    } yield images
+  }
+
+
+  val url = "TEST"
+  val imageFinder = find(url)
+  println(imageFinder.run(dependencies).get)
 }
 
 
 object ReaderExamples3 extends App {
+  import scalaz._, Scalaz._
 
   case class User(id: Long, email: String)
 
@@ -149,7 +172,7 @@ object ReaderExamples3 extends App {
 }
 
 object ReaderExample4 extends App {
-
+  import scalaz._, Scalaz._
   case class Book(isbn: String, name: String)
 
   trait Repository {
