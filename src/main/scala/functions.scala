@@ -23,8 +23,7 @@ object exercise3 {
       val first = left(str)
       first.fold(l => right(str), r => first)
     }
-
-
+  
   def seq[A, B] (fist: Parser[A], right: Parser[B]): Parser[(A, B)] = ???
 }
 
@@ -39,5 +38,3 @@ object exercise4 {
     def apply[A](v: (A, A)): A = v._1
   }
 }
-
-

@@ -1,6 +1,4 @@
-package temp
-
-import temp.typeclassExamples.toHtml
+package misc
 
 
 object typeclassExamples {
@@ -41,9 +39,6 @@ object typeclassExamples {
   toHtml(Person("Dave", Email("dave@example.com"), 36))
   toHtml(123)(intWriter)
 }
-
-
-
 
 object typeClassExamplesApp extends  App {
 

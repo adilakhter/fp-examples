@@ -3,6 +3,7 @@ package lambdaconf.patterns
 
 import scalaz._
 import Scalaz._
+import scala.io.StdIn
 import scala.util.Try
 import scalaz.Alpha.G
 
@@ -10,17 +11,17 @@ object exercise1 {
   import ToEither2._
   def readRowCol(): (Int, Int) = {
     println("Please enter a row:")
-    val row = readLine()
+    val row = StdIn.readInt()
     println("Please enter a column:")
-    val col = readLine()
-    (row.toInt, col.toInt)
+    val col = StdIn.readInt()
+    (row, col)
   }
 
-  def readRowCol2(): Throwable \/(Int, Int) = {
+  def readRowCol2()  = {
     println("Please enter a row:")
-    val row: String = readLine()
+    val row = StdIn.readInt()
     println("Please enter a column:")
-    val col: String = readLine()
+    val col = StdIn.readInt()
 
     for {
       a <- Try(row.toInt).toEither
@@ -104,9 +105,9 @@ object exercise3App extends App {
     } yield (a, b)
 
 
-  val result: (Disjunction[Throwable, Int], Disjunction[Throwable, Int]) = ioResult.unsafePerformIO()
-  val result2: List[Disjunction[Throwable, Int]] = List(result._1, result._2)
-  val test: \/[Throwable, List[Int]] = result2.sequenceU
+  val result = ioResult.unsafePerformIO()
+  val result2 = List(result._1, result._2)
+  val test = result2.sequenceU
 
   /**
    * Please enter a row: 1
