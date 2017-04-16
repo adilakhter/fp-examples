@@ -1,13 +1,30 @@
 
-import ReaderExample1.ImageExtractorComponent
 
-import scalaz.{Reader, _}
-import Scalaz._
-import scala.util.Try
+
+object ReaderMonadImplementation {
+
+  case class Reader[Conf, T](run: Conf ⇒ T) { self ⇒
+    def map[U](f: T ⇒ U): Reader[Conf, U] =
+      Reader(self.run andThen f)
+
+    def flatMap[U](f: T ⇒ Reader[Conf, U]): Reader[Conf, U] =
+      Reader[Conf, U](conf ⇒ f(self.run(conf)).run(conf))
+
+    def local[Conf1](f: Conf1 ⇒ Conf): Reader[Conf1, T] =
+      Reader[Conf1, T](f andThen run)
+  }
+
+  object Reader {
+    def pure [C, A] (a: A): Reader[C, A] = Reader(_ ⇒ a)
+
+    implicit def funToReader[C, A](read: C ⇒ A): Reader[C, A] =
+      Reader(read)
+  }
+}
 
 
 object SimpleReaderExample1 extends App {
-
+  import ReaderMonadImplementation._
   val f = Reader((i: Int) ⇒ i * 3)
   val g = Reader((i: Int) ⇒ i * 10)
 
@@ -20,6 +37,12 @@ object SimpleReaderExample1 extends App {
   println(fog.run(10))
 
 }
+
+import scalaz._
+import Scalaz._
+import scala.util.Try
+
+
 
 object ReaderExample1 extends App{
 
