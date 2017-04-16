@@ -174,18 +174,3 @@ object ReaderExample4 extends App {
   println(universityLibraryApp.getAll)
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
