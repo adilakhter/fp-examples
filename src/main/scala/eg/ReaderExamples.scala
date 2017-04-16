@@ -3,22 +3,35 @@
 
 object ReaderMonadImplementation {
 
-  case class Reader[Conf, T](run: Conf ⇒ T) { self ⇒
-    def map[U](f: T ⇒ U): Reader[Conf, U] =
-      Reader(self.run andThen f)
+  case class Reader[-C, +A](run: C ⇒ A) { self ⇒
 
-    def flatMap[U](f: T ⇒ Reader[Conf, U]): Reader[Conf, U] =
-      Reader[Conf, U](conf ⇒ f(self.run(conf)).run(conf))
+    def apply(c: C): A = run(c)
 
-    def local[Conf1](f: Conf1 ⇒ Conf): Reader[Conf1, T] =
-      Reader[Conf1, T](f andThen run)
+    def map[B](f: A ⇒ B): Reader[C, B] =
+      Reader(c ⇒ f(self.run(c)))
+
+    def flatMap[B, D <: C](f: A ⇒ Reader[D, B]): Reader[D, B] =
+      Reader[D, B](conf ⇒ f(self.run(conf)).run(conf))
+
+    def local[D <: C](f: D ⇒ C): Reader[D, A] =
+      Reader[D, A](f andThen run)
+
+    def zip[B, D <: C](other: Reader[D, B]): Reader[D, (A, B)] =
+      self.flatMap(t ⇒ other.map(b ⇒ (t, b)))
+
   }
 
   object Reader {
     def pure [C, A] (a: A): Reader[C, A] = Reader(_ ⇒ a)
 
-    implicit def funToReader[C, A](read: C ⇒ A): Reader[C, A] =
+    implicit def reader[C, A](read: C ⇒ A): Reader[C, A] =
       Reader(read)
+
+    def sequence[C, R](list: TraversableOnce[Reader[C, R]]): Reader[C, TraversableOnce[R]] = reader { conn =>
+      for {
+        r <- list
+      } yield r(conn)
+    }
   }
 }
 
