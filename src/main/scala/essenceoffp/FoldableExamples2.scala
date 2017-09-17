@@ -1,10 +1,9 @@
 package essenceoffp
 
 import org.scalatest._
-import Matchers._
-
+import org.scalatest.Matchers._
 import scalaz._
-import Scalaz._
+import scalaz.Scalaz._
 
 
 object TreeImpl {

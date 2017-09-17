@@ -79,7 +79,11 @@ object traversablesExample02 extends App {
 
   val binaryTree: Tree[Option[Int]] =
     Node(Leaf(Some(1)), Node(Leaf(Some(2)), Leaf(Some(3))))
+  val binaryTree2: Tree[Option[Int]] =
+    Node(Leaf(Some(1)), Node(Leaf(Some(2)), Leaf(None)))
 
 
   binaryTree.sequence[Option, Int] shouldEqual Some(Node(Leaf(1),Node(Leaf(2), Leaf(3))))
+  
+  binaryTree2.sequence[Option, Int] shouldEqual None
 }

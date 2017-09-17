@@ -1,11 +1,49 @@
 package eg
 
 import cats.Eval
+import cats.data.{State, StateT}
 
 
 object MonadicLoopWithStateMonad extends App {
   //https://gist.github.com/noelwelsh/2b27272573c0e5294bb4
   // Monadic Loop with State Monad
+
+  type MyState[A] = State[Int, A]
+
+  def extractNextItem: MyState[Option[Int]] =
+    State { counter ⇒
+      if (counter == 0) {
+        println(s"counter: $counter")
+        (0, None)
+      }
+      else{
+        println(s"counter: $counter")
+        (counter - 1, Some(counter))
+      }
+    }
+
+  def process(in: Option[Int]): Boolean =
+    in match {
+      case None    => false
+      case Some(x) =>
+        println(s"Value is $x")
+        true
+    }
+
+  def loop(in: MyState[Boolean]): MyState[Boolean] = {
+    val choice: MyState[Boolean] = extractNextItem map process
+
+    choice flatMap { bool ⇒
+      if (bool)
+        loop(choice)
+      else
+        choice
+    }
+  }
+
+  val loopInternal: MyState[Boolean] = extractNextItem map process
+
+  loop(loopInternal).run(5)
 }
 
 
@@ -21,7 +59,6 @@ object ComposingAndTransformingStates extends App {
     val ans = num * 2
     (ans, s"Result of step1: $ans")
   }
-
 
   val both =
     for {

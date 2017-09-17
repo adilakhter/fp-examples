@@ -9,6 +9,7 @@ object Test extends App {
   println(x.applyDynamic("lookup1")("hello", 42))
 
   println(x.lookup2("hello"))
+
 }
 
 

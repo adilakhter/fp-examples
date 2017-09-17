@@ -20,6 +20,7 @@ object exercise1 {
   def readRowCol2()  = {
     println("Please enter a row:")
     val row = StdIn.readInt()
+
     println("Please enter a column:")
     val col = StdIn.readInt()
 

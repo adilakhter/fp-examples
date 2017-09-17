@@ -1,6 +1,5 @@
 package lambdaconf.functions
 import scalaz._
-
 import Scalaz._
 
 object exercise1 {
