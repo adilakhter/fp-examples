@@ -1,8 +1,5 @@
 package essenceoffp
 
-import essenceoffp.FunctorTestApp.Product
-import essenceoffp.typeClassDemo01.{Leaf, Node, Product}
-
 
 object foldablesExample01 extends App {
 
@@ -27,10 +24,9 @@ object foldablesExample02 extends App {
 
   import scalaz._
   import Scalaz._
-
   import org.scalatest.Matchers._
 
-  implicit def foldableTree = new Foldable[Tree] {
+  implicit def foldableTree: Foldable[Tree] = new Foldable[Tree] {
     override def foldMap[A, B](fa: Tree[A])(f: (A) => B)(implicit F: Monoid[B]): B = fa match {
       case Leaf(v) => f(v)
       case Node(l, r) => F.append(foldMap(l)(f), foldMap(r)(f))
@@ -76,7 +72,6 @@ object foldablesExample03 extends App {
 
   import scalaz._
   import Scalaz._
-
   import org.scalatest.Matchers._
 
   implicit def foldableTree = new Foldable[Tree] {
@@ -104,12 +99,7 @@ object foldablesExample03 extends App {
   def toList2[F[_] : Foldable, A, B](fa: F[A])(f: A ⇒ B): List[B] =
     fa.foldMap{a ⇒ List(f(a))}
 
-
-
 }
-
-
-
 
 object foldablesExample04 extends  App {
 

@@ -1,0 +1,24 @@
+<code_scheme name="Default">
+    <ScalaCodeStyleSettings>
+        <option name="importLayout">
+            <array>
+                <option value="_______ blank line _______" />
+                <option value="java" />
+                <option value="_______ blank line _______" />
+                <option value="scala" />
+                <option value="_______ blank line _______" />
+                <option value="all other imports" />
+                <option value="_______ blank line _______" />
+                <option value="nl.ing" />
+                <option value="_______ blank line _______" />
+                <option value="com.ing" />
+                <option value="_______ blank line _______" />
+                <option value="com.ing.ml" />
+                <option value="_______ blank line _______" />
+            </array>
+        </option>
+        <option name="sortAsScalastyle" value="true" />
+        <option name="ALIGN_IN_COLUMNS_CASE_BRANCH" value="false" />
+        <option name="USE_SCALADOC2_FORMATTING" value="false" />
+    </ScalaCodeStyleSettings>
+</code_scheme>

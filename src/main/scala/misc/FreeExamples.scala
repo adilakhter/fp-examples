@@ -1,7 +1,7 @@
 package misc
 
+import cats.Id
 import cats.free.Free
-import cats.{Id, ~>}
 
 
 object freeExamples {
@@ -66,8 +66,8 @@ object freeExamples {
       heading=Degree(pos.heading.value - d.value))
   }
 
-  import cats.{Id,~>}
   import Logo._
+  import cats.{Id, ~>}
 
   object InterpreterId extends (Instruction ~> Id) {
     import Computations._
@@ -84,9 +84,9 @@ object freeExamples {
 
 
 object InterpreterIdApp extends App {
-  import freeExamples._
-  import freeExamples.Logo._
   import freeExamples.DSL._
+  import freeExamples.Logo._
+  import freeExamples._
 
   val program: (Position ⇒ Free[Instruction, Position]) = {
     start: Position ⇒
