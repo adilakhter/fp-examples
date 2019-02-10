@@ -53,7 +53,7 @@ object CakePattern1 extends App {
     def userAuthorization: UserAuthorization
 
     trait UserAuthorization {
-      def authorize(user: User)
+      def authorize(user: User): User
     }
   }
 
@@ -66,7 +66,7 @@ object CakePattern1 extends App {
     def userAuthorization = new UserAuthorizationImpl
 
     class UserAuthorizationImpl extends UserAuthorization {
-      def authorize(user: User) {
+      def authorize(user: User): User =  {
         println("Authorizing " + user.username)
         // Obtaining the dependency and calling a method on it
         userRepository.find(user.username)
@@ -198,5 +198,3 @@ abstract class Graph {
 
 
 }
-
-
