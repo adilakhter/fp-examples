@@ -12,14 +12,15 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest"         % "3.0.1",
   "com.chuusai"   %% "shapeless"         % "2.3.2",
   "com.lihaoyi"   % "ammonite"           % "1.6.3-0-c77705a" % "test" cross CrossVersion.full,
-  "org.typelevel" %% "cats"              % "0.9.0"
+  "org.typelevel" %% "cats-core"         % "1.6.0"
 )
 
-// for @Lenses macro support
-addCompilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full)
+libraryDependencies += "org.typelevel" %% "cats-effect" % "1.0.0-RC"
 
-// For kind projector, `Either[String, ?]`
-addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.3")
+// for @Lenses macro support
+addCompilerPlugin("org.scalamacros" %% "paradise"           % "2.1.0" cross CrossVersion.full)
+addCompilerPlugin("org.spire-math"  %% "kind-projector"     % "0.9.4")
+addCompilerPlugin("com.olegpy"      %% "better-monadic-for" % "0.1.0")
 
 initialCommands in console := "import scalaz._, Scalaz._"
 
